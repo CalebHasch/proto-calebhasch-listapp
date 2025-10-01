@@ -13,7 +13,8 @@ export default {
     login(){
       //make sure username OR password are not empty
       if(this.input.username != "" || this.input.password != ""){
-        console.log("authenticated")
+        console.log("authenticated");
+        this.$router.push('/home');
       }else{
         console.log("Username and Password can not be empty")
       }
