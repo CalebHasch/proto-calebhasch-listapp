@@ -1,4 +1,4 @@
-<script>
+<script setup>
 import { ref } from 'vue';
 import { signIn } from '../stores/auth';
 import { useRouter } from 'vue-router';

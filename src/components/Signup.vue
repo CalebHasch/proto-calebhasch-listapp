@@ -1,4 +1,4 @@
-<script>
+<script setup>
 import { ref } from 'vue';
 import { signUp } from '../stores/auth';
 import { useRouter } from 'vue-router';
@@ -27,7 +27,7 @@ async function onSignup() {
     // user is signed in automatically
     router.push('/home');
   } else {
-    message.value = 'Signup successful! You can now log in.';
+    message.value = 'Signup successful! Please confirm your email and log in.';
   }
 }
 </script>
