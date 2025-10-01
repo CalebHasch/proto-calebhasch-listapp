@@ -2,7 +2,7 @@ import { createWebHistory, createRouter } from "vue-router";
 import Login from "../components/Login.vue";
 import Signup from "../components/Signup.vue";
 import Home from "../components/Home.vue";
-import { user } from "../store/auth";
+import { user } from "../stores/auth";
 
 const routes = [
   { path: "/", redirect: "/home" },

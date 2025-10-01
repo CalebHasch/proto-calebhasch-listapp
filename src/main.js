@@ -6,4 +6,7 @@ import { initAuth } from "./stores/auth";
 
 const app = createApp(App);
 app.use(router);
-app.mount("#app");
+
+initAuth().then(() => {
+  app.mount("#app");
+});
