@@ -40,7 +40,7 @@ watch(user, () => {});
   padding:12px 16px;
   border-bottom:1px solid #eee;
 }
-.logo a { font-weight:600; text-decoration:none; color:inherit; }
+.logo a { font-weight:600; text-decoration:none; color:inherit; margin-right:20px; }
 nav { display:flex; gap:12px; align-items:center; }
 .username { margin-right:8px; }
 .link { text-decoration:none; }
