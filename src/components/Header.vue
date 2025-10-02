@@ -16,7 +16,7 @@ watch(user, () => {});
 <template>
   <header class="header">
     <div class="logo">
-      <router-link to="/home">MyApp</router-link>
+      <router-link to="/home">My Games</router-link>
     </div>
 
     <nav>
