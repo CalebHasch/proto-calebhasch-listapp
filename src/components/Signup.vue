@@ -1,34 +1,15 @@
 <script setup>
 import { ref } from 'vue';
-import { signUp } from '../stores/auth';
-import { useRouter } from 'vue-router';
+import { useAuth } from '../composables/useAuth';
+
+const { signup, loading, error } = useAuth();
 
 const email = ref('');
 const password = ref('');
-const loading = ref(false);
-const message = ref('');
-const error = ref('');
-const router = useRouter();
+
 
 async function onSignup() {
-  loading.value = true;
-  message.value = '';
-  error.value = '';
-
-  const { data, error: err } = await signUp(email.value, password.value);
-  loading.value = false;
-
-  if (err) {
-    error.value = err.message || 'Failed to sign up';
-    return;
-  }
-
-  if (data?.session) {
-    // user is signed in automatically
-    router.push('/home');
-  } else {
-    message.value = 'Signup successful! Please confirm your email and log in.';
-  }
+  await signup(email.value, password.value);
 }
 </script>
 

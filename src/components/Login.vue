@@ -1,24 +1,14 @@
 <script setup>
 import { ref } from 'vue';
-import { signIn } from '../stores/auth';
-import { useRouter } from 'vue-router';
+import { useAuth } from '../composables/useAuth';
+
+const { login, loading , error} = useAuth();
 
 const email = ref('');
 const password = ref('');
-const loading = ref(false);
-const error = ref('');
-const router = useRouter();
 
 async function onLogin() {
-  loading.value = true;
-  error.value = '';
-  const { data, error: err } = await signIn(email.value, password.value);
-  loading.value = false;
-  if (err) {
-    error.value = err.message || 'Login failed';
-    return;
-  }
-  router.push('/home');
+  await login(email.value, password.value);
 }
 </script>
 
@@ -47,7 +37,6 @@ async function onLogin() {
 </template>
 
 <style scoped>
-/* reuse same simple styles as signup */
 .auth-card { max-width:420px; margin:32px auto; padding:20px; border:1px solid #eee; border-radius:8px; }
 label { display:block; margin-bottom:12px; }
 input { width:100%; padding:8px; margin-top:6px; box-sizing:border-box; }

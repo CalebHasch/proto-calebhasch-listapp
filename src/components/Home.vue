@@ -1,59 +1,17 @@
 <script setup>
 import { ref, onMounted, watch } from 'vue';
-import { supabase } from '../supabase';
-import { user } from '../stores/auth';
+import { useAuth } from '../composables/useAuth';
+import { useGames } from '../composables/useGames';
 
-const games = ref([]);
+const { user } = useAuth();
+const { games, fetchGames, addGame, deleteGame, error } = useGames();
+
 const newGame = ref('');
-const error = ref('');
 
-async function fetchGames() {
-  error.value = '';
-  if (!user.value) return games.value = [];
-
-  const { data, error: err } = await supabase
-    .from('Game List')
-    .select('*')
-    .eq('user_id', user.value.id)
-    .order('created_at', { ascending: false });
-
-  if (err) {
-    error.value = err.message;
-  } else {
-    games.value = data;
-  }
-}
-
-async function addGame() {
+function onAdd() {
   if (!newGame.value.trim()) return;
-  error.value = '';
-
-  const { data, error: err } = await supabase
-    .from('Game List')
-    .insert([{ user_id: user.value.id, game: newGame.value }])
-    .select()
-    .single();
-
-  if (err) {
-    error.value = err.message;
-  } else {
-    games.value.unshift(data);
-    newGame.value = '';
-  }
-}
-
-async function deleteGame(id) {
-  const { error: err } = await supabase
-    .from('Game List')
-    .delete()
-    .eq('id', id)
-    .eq('user_id', user.value.id);
-
-  if (err) {
-    error.value = err.message;
-  } else {
-    games.value = games.value.filter(i => i.id !== id);
-  }
+  addGame(newGame.value);
+  newGame.value = '';
 }
 
 onMounted(fetchGames);
@@ -68,7 +26,7 @@ watch(user, (u) => {
   <div class="home">
     <h2>Here are the Games you Own!</h2>
 
-    <form @submit.prevent="addGame" class="add-form">
+    <form @submit.prevent="onAdd" class="add-form">
       <input v-model="newGame" placeholder="Add a game..." />
       <button class="btn" type="submit">Add</button>
     </form>

@@ -2,7 +2,7 @@ import { createWebHistory, createRouter } from "vue-router";
 import Login from "../components/Login.vue";
 import Signup from "../components/Signup.vue";
 import Home from "../components/Home.vue";
-import { user } from "../stores/auth";
+import { useAuth } from "../composables/useAuth";
 
 const routes = [
   { path: "/", redirect: "/home" },
@@ -17,6 +17,8 @@ const router = createRouter({
 });
 
 router.beforeEach((to, from, next) => {
+  const { user } = useAuth();
+
   if (to.meta.requiresAuth && !user.value) {
     return next("/login");
   }

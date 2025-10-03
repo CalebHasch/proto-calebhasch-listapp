@@ -1,16 +1,8 @@
 <script setup>
-import { user, signOut } from '../stores/auth';
-import { useRouter } from 'vue-router';
-import { watch } from 'vue';
+import { useAuth } from '../composables/useAuth';
 
-const router = useRouter();
+const { user, logout } = useAuth();
 
-async function handleLogout() {
-  await signOut();
-  router.push('/login');
-}
-
-watch(user, () => {});
 </script>
 
 <template>
@@ -22,7 +14,7 @@ watch(user, () => {});
     <nav>
       <template v-if="user">
         <span class="username">{{ user.email }}</span>
-        <button @click="handleLogout" class="btn">Logout</button>
+        <button @click="logout" class="btn">Logout</button>
       </template>
       <template v-else>
         <router-link to="/login" class="link">Login</router-link>
