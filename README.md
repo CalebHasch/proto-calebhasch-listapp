@@ -6,7 +6,7 @@ This app uses vite, vue, and supabase to creat a list of games owned by the user
 
 download project files
 run "npm install"
-create env.local file and add example Vite Variables
+create env.local file and VITE Variables
 run "npm run dev"
 
 # Example env variables
@@ -35,3 +35,4 @@ https://vite.dev/guide/
 https://vuejs.org/guide/quick-start.html
 https://supabase.com/docs/reference/javascript
 https://storiesfromtheherd.com/basics-of-vue-3-js-713760d46bb1
+https://chatgpt.com/

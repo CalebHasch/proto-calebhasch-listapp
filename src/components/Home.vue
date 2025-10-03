@@ -2,19 +2,19 @@
 import { ref, onMounted, watch } from 'vue';
 import { useAuth } from '../composables/useAuth';
 import { useGames } from '../composables/useGames';
+import AddGameModal from './AddGameModal.vue';
 
 const { user } = useAuth();
 const { games, fetchGames, addGame, deleteGame, error } = useGames();
 
-const newGame = ref('');
+const showModal = ref(false);
 
-function onAdd() {
-  if (!newGame.value.trim()) return;
-  addGame(newGame.value);
-  newGame.value = '';
+async function handleAddGame(gameData) {
+  await addGame(gameData);
 }
 
 onMounted(fetchGames);
+
 // refetch when user changes (login/logout)
 watch(user, (u) => {
   if (u) fetchGames();
@@ -26,17 +26,36 @@ watch(user, (u) => {
   <div class="home">
     <h2>Here are the Games you Own!</h2>
 
-    <form @submit.prevent="onAdd" class="add-form">
-      <input v-model="newGame" placeholder="Add a game..." />
-      <button class="btn" type="submit">Add</button>
-    </form>
+     <button class="btn" @click="showModal = true">Add Game</button>
 
-    <ul class="games">
-      <li v-for="game in games" :key="game.id">
-        <span>{{ game.game }}</span>
-        <button @click="deleteGame(game.id)" class="small">Delete</button>
-      </li>
-    </ul>
+    <AddGameModal
+      :show="showModal"
+      @close="showModal = false"
+      @add="handleAddGame"
+    />
+
+    <table class="games-table" v-if="games.length">
+      <thead>
+        <tr>
+          <th>Game</th>
+          <th>Genre</th>
+          <th>Player Rating</th>
+          <th>Date Received</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-for="game in games" :key="game.id">
+          <td>{{ game.game }}</td>
+          <td>{{ game.genre || '-' }}</td>
+          <td>{{ game.player_rating ?? '-' }}</td>
+          <td>{{ game.date_received }}</td>
+          <td>
+            <button @click="deleteGame(game.id)" class="small">Delete</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
 
     <p v-if="games.length === 0">No games yet — add one!</p>
     <p v-if="error" class="error">{{ error }}</p>
@@ -46,10 +65,9 @@ watch(user, (u) => {
 
 <style scoped>
 .home { max-width:720px; margin:20px auto; padding:12px; }
-.add-form { display:flex; gap:8px; margin-bottom:12px; }
-.add-form input { flex:1; padding:8px; }
-.games { list-style:none; padding:0; margin:0; }
-.games li { display:flex; justify-content:space-between; padding:8px 0; border-bottom:1px solid #f2f2f2; }
+.btn { margin-bottom:12px; }
+.games-table { width:100%; border-collapse: collapse; }
+.games-table th, .games-table td { padding:8px; border-bottom:1px solid #ddd; text-align:left; }
 .small { padding:4px 8px; }
 .error { color: #c00; margin-top:8px; }
 </style>

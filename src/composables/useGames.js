@@ -28,13 +28,22 @@ export function useGames() {
     return data;
   };
 
-  const addGame = async (game) => {
+  const addGame = async (gameData) => {
     if (!user.value) return;
     error.value = "";
 
+    const insertData = {
+      user_id: user.value.id,
+      game: gameData.game,
+      genre: gameData.genre,
+      player_rating: gameData.player_rating,
+      date_received:
+        gameData.date_received || new Date().toISOString().split("T")[0],
+    };
+
     const { data, error: err } = await supabase
       .from("Game List")
-      .insert([{ user_id: user.value.id, game: game }])
+      .insert([insertData])
       .select()
       .single();
 
@@ -44,7 +53,7 @@ export function useGames() {
     }
 
     games.value.unshift(data);
-    return data[0];
+    return data;
   };
 
   const deleteGame = async (id) => {
