@@ -17,6 +17,7 @@ export function useGames() {
       .from("Game List")
       .select("*")
       .eq("user_id", user.value.id)
+      .order("date_received", { ascending: false })
       .order("created_at", { ascending: false });
 
     if (err) {
